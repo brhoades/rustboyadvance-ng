@@ -6,6 +6,7 @@ use bincode;
 use serde::{Deserialize, Serialize};
 
 use crate::gdb_support::{gdb_thread::start_gdb_server_thread, DebuggerRequestHandler};
+use crate::socket_io::SocketIO;
 
 use super::cartridge::Cartridge;
 use super::dma::DmaController;
@@ -30,6 +31,8 @@ pub struct GameBoyAdvance {
     interrupt_flags: SharedInterruptFlags,
     audio_interface: DynAudioInterface,
     pub(crate) debugger: Option<DebuggerRequestHandler>,
+
+    pub(crate) socket_io: SocketIO,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -100,6 +103,8 @@ impl GameBoyAdvance {
             gamepak,
         ));
 
+        let sock_io = SocketIO::new(Some(scheduler.clone()));
+
         let cpu = Box::new(Arm7tdmiCore::new(sysbus.clone()));
 
         let mut gba = GameBoyAdvance {
@@ -109,6 +114,7 @@ impl GameBoyAdvance {
             audio_interface,
             scheduler,
             interrupt_flags,
+            socket_io: sock_io,
             debugger: None,
         };
 
@@ -144,6 +150,7 @@ impl GameBoyAdvance {
             sysbus.clone(),
             decoded.cpu_state,
         ));
+        let sock_io = SocketIO::new(None);
 
         sysbus.init(arm7tdmi.weak_ptr());
 
@@ -154,6 +161,7 @@ impl GameBoyAdvance {
             interrupt_flags: interrupts,
             audio_interface,
             scheduler,
+            socket_io: sock_io,
             debugger: None,
         })
     }
@@ -370,6 +378,15 @@ impl GameBoyAdvance {
                 }
                 EventType::Gpu(gpu_event) => Some(io.gpu.on_event(gpu_event, &mut *self.sysbus)),
                 EventType::Apu(event) => Some(io.sound.on_event(event, &mut self.audio_interface)),
+                EventType::SocketIO => {
+                    use crate::socket_io::*;
+
+                    self.socket_io.on_event(GameState {
+                        iwram: self.sysbus.get_iwram(),
+                        ewram: self.sysbus.get_ewram(),
+                        time: self.scheduler.timestamp(),
+                    })
+                }
             };
             if let Some((new_event, when)) = new_event {
                 // We schedule events added by event handlers relative to the handled event time

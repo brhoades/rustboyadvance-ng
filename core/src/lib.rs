@@ -49,6 +49,7 @@ pub mod gdb_support;
 pub mod keypad;
 mod mgba_debug;
 pub(crate) mod overrides;
+mod socket_io;
 pub mod timer;
 
 use arm7tdmi::gdb::gdbstub::stub::GdbStubError;

@@ -34,6 +34,7 @@ pub enum EventType {
     Apu(ApuEvent),
     DmaActivateChannel(usize),
     TimerOverflow(usize),
+    SocketIO,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq)]
