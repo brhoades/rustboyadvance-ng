@@ -84,7 +84,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut renderer = video::init(&sdl_context)?;
     let (audio_interface, mut _sdl_audio_device) = audio::create_audio_player(&sdl_context)?;
-    let mut rom_name = opts.rom_name();
+    let rom_name = opts.rom_name();
 
     let bios_bin = load_bios(&opts.bios);
 
@@ -208,7 +208,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
                 Event::Quit { .. } => break 'running,
-                Event::DropFile { filename, .. } => {
+                Event::DropFile {  .. } => {
                     todo!("impl DropFile again")
                 }
                 _ => {}

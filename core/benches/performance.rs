@@ -2,8 +2,8 @@
 ///
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion};
 
-use std::cell::RefCell;
-use std::rc::Rc;
+
+
 
 use rustboyadvance_core::prelude::*;
 

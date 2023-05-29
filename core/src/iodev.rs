@@ -109,10 +109,10 @@ impl BusIO for IoDevices {
             REG_BG1CNT => io.gpu.bgcnt[1].read(),
             REG_BG2CNT => io.gpu.bgcnt[2].read(),
             REG_BG3CNT => io.gpu.bgcnt[3].read(),
-            REG_WIN0H => ((io.gpu.win0.left as u16) << 8 | (io.gpu.win0.right as u16)),
-            REG_WIN1H => ((io.gpu.win1.left as u16) << 8 | (io.gpu.win1.right as u16)),
-            REG_WIN0V => ((io.gpu.win0.top as u16) << 8 | (io.gpu.win0.bottom as u16)),
-            REG_WIN1V => ((io.gpu.win1.top as u16) << 8 | (io.gpu.win1.bottom as u16)),
+            REG_WIN0H => (io.gpu.win0.left as u16) << 8 | (io.gpu.win0.right as u16),
+            REG_WIN1H => (io.gpu.win1.left as u16) << 8 | (io.gpu.win1.right as u16),
+            REG_WIN0V => (io.gpu.win0.top as u16) << 8 | (io.gpu.win0.bottom as u16),
+            REG_WIN1V => (io.gpu.win1.top as u16) << 8 | (io.gpu.win1.bottom as u16),
             REG_WININ => {
                 ((io.gpu.win1.flags.bits() as u16) << 8) | (io.gpu.win0.flags.bits() as u16)
             }

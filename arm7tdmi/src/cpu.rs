@@ -4,7 +4,7 @@ use log::debug;
 use serde::{Deserialize, Serialize};
 use bit::BitIndex;
 use num::FromPrimitive;
-use ansi_term::{Colour, Style};
+use ansi_term::{Style};
 
 use rustboyadvance_utils::{Shared, WeakPointer};
 
