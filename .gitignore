@@ -6,3 +6,6 @@
 /*.gba
 
 /.logs
+/*.SAV
+/*.sav
+.direnv
